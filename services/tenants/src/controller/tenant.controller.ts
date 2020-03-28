@@ -17,6 +17,7 @@ class TenantController extends AbstractController {
 
   private initializeRoutes() {
     this.router.get('/', this.getAll);
+    this.router.get('/:slug', this.getBySlug);
     this.router.post('/', this.save);
   }
 
@@ -24,11 +25,35 @@ class TenantController extends AbstractController {
     response.send(await this.repository.find());
   }
 
-  private save = async (request: express.Request, response: express.Response) => {
-    const tenant = new Tenant();
-    tenant.slug = 'bigcompany';
+  private getBySlug = async (request: express.Request, response: express.Response) => {
+    const tenant = await this.findBySlug(request.params.slug);
 
-    response.send(await this.repository.save(tenant));
+    if (tenant) {
+      return response.json(tenant);
+    }
+
+    response.status(404).json({
+      message: 'Could not found tenant with the given slug',
+    });
+  }
+
+  private save = async (request: express.Request, response: express.Response) => {
+    const tenant: Tenant = Object.assign(new Tenant(), request.body);
+    const existingTenant = await this.findBySlug(tenant.slug);
+
+    if (!existingTenant) {
+      return response.status(201).json(await this.repository.save(tenant));
+    }
+
+    response.status(422).json({
+      message: 'Slug is already taken',
+    });
+  }
+
+  private async findBySlug(slug: string) {
+    return this.repository.createQueryBuilder('tenant')
+      .where('tenant.slug = :slug', { slug })
+      .getOne();
   }
 }
 

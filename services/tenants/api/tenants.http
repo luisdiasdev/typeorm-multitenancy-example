@@ -1,6 +1,22 @@
+### Get All Tenants
 GET http://localhost:3000/tenants
 Content-Type: application/json
 
-###
+### 200 - Get Tenant By Slug (404 if not found)
+GET http://localhost:3000/tenants/alma_mater
+Content-Type: application/json
+
+### 201 - Save a new tenant (422 if slug already taken)
 POST http://localhost:3000/tenants HTTP/1.1
 Content-Type: application/json
+
+{
+    "slug": "alma_mater3",
+    "config": {
+        "host": "172.10.0.5",
+        "port": "5433",
+        "username": "postgres",
+        "password": "moonspell",
+        "database": "alma_mater"
+    }
+}

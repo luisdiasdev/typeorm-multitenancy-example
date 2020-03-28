@@ -10,7 +10,7 @@ declare global {
     interface ProcessEnv {
       NODE_ENV: string
       PORT: string
-      MAIN_DATABASE_URL: string
+      DATABASE_URL: string
     }
   }
 }
@@ -18,7 +18,7 @@ declare global {
 const properties = {
   env: process.env.NODE_ENV,
   port: parseInt(process.env.PORT || '', 10),
-  databaseUrl: process.env.MAIN_DATABASE_URL,
+  databaseUrl: process.env.DATABASE_URL,
 };
 
 export default properties;
