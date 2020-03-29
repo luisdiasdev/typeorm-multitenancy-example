@@ -1,19 +1,16 @@
-import express from 'express';
-import helmet from 'helmet';
-import bodyParser from 'body-parser';
-import errorHandler from 'errorhandler';
-import properties, { Env } from './config';
+import App from './app';
+import { properties } from './config';
+import UserController from './controller/user.controller';
 
-const app = express();
+async function bootstrap() {
+  const app = new App(
+    properties.port,
+    [
+      new UserController(),
+    ],
+  );
 
-app.use(helmet());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-if (properties.env === Env.DEVELOPMENT) {
-  app.use(errorHandler());
+  app.listen();
 }
 
-app.get('/', (req, res) => res.json({ hello: 'world' }));
-
-app.listen(properties.port, () => console.log(`server started on ${properties.port}`));
+bootstrap();
