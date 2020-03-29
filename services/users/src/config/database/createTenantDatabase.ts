@@ -1,7 +1,7 @@
 import { getConnectionManager, ConnectionOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import User from '../../model/user.model';
-import TenantConfig from '../../dto/tenantConfig.response';
+import User from '../../modules/user/model';
+import TenantConfig from '../../modules/tenant/dto/tenantConfig.response';
 
 async function connectTenantDatabase(slug: string, options: ConnectionOptions) {
   const connection = getConnectionManager().create({

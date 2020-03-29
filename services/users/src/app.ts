@@ -3,10 +3,10 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
 import { Env, properties } from './config';
-import TenantClient from './client/tenant.client';
-import AbstractController from './controller/abstract.controller';
-import createTenantResolver from './middleware/tenant.middleware';
-import httpErrorHandler from './middleware/error.middleware';
+import TenantClient from './modules/tenant/client';
+import AbstractController from './modules/shared/controller/abstract.controller';
+import createTenantResolver from './modules/shared/middleware/tenant.middleware';
+import httpErrorHandler from './modules/shared/middleware/error.middleware';
 
 class App {
     private app: express.Application;

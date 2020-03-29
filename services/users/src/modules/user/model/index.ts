@@ -2,7 +2,7 @@ import {
   Entity, Column,
 } from 'typeorm';
 import { Length } from 'class-validator';
-import BaseModel from './base.model';
+import BaseModel from '../../shared/model/base';
 
 @Entity('users')
 export default class User extends BaseModel {

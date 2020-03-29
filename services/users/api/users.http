@@ -1,3 +1,13 @@
 ### Get All users 
 http://localhost:3001/users
 App-Tenant-Slug: alma_mater
+
+### Post User
+POST http://localhost:3001/users HTTP/1.1
+App-Tenant-Slug: alma_mater
+Content-Type: application/json
+
+{
+    "username": "agateownz",
+    "password": "passwordisnotencryptedyet"
+}
