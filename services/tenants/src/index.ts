@@ -1,6 +1,6 @@
 import App from './app';
 import { properties, createDatabaseConnection } from './config';
-import TenantController from './controller/tenant.controller';
+import TenantController from './modules/tenant/controller/tenant.controller';
 
 async function bootstrap() {
   await createDatabaseConnection();

@@ -3,8 +3,8 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
 import { Env, properties } from './config';
-import AbstractController from './controller/abstract.controller';
-import httpErrorHandler from './middleware/error.middleware';
+import AbstractController from './modules/shared/controller/abstract.controller';
+import httpErrorHandler from './modules/shared/middleware/error.middleware';
 
 class App {
     private app: express.Application;

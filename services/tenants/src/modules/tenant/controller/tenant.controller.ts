@@ -1,8 +1,9 @@
 import express from 'express';
 import { getRepository } from 'typeorm';
-import AbstractController from './abstract.controller';
+import HttpException from '../../shared/exception/HttpException';
+import AbstractController from '../../shared/controller/abstract.controller';
+import validationMiddleware from '../../shared/middleware/validation.middleware';
 import Tenant from '../model/tenant.model';
-import validationMiddleware from '../middleware/validation.middleware';
 import CreateTenantRequest from '../dto/createTenant.request';
 
 class TenantController extends AbstractController {
@@ -27,30 +28,33 @@ class TenantController extends AbstractController {
     response.send(await this.repository.find());
   }
 
-  private getBySlug = async (request: express.Request, response: express.Response) => {
+  private getBySlug = async (
+    request: express.Request,
+    response: express.Response,
+    next: express.NextFunction) => {
     const tenant = await this.findBySlug(request.params.slug);
 
     if (tenant) {
-      return response.json(tenant);
+      response.send(tenant);
+      return;
     }
 
-    response.status(404).json({
-      message: 'Could not found tenant with the given slug',
-    });
+    next(new HttpException(404, 'Could not found tenant with the given slug'));
   }
 
-  private save = async (request: express.Request, response: express.Response) => {
+  private save = async (
+    request: express.Request,
+    response: express.Response,
+    next: express.NextFunction) => {
     const tenant: Tenant = Object.assign(new Tenant(), request.body);
     const existingTenant = await this.findBySlug(tenant.slug);
 
     if (!existingTenant) {
-      response.status(201).json(await this.repository.save(tenant));
+      response.status(201).send(await this.repository.save(tenant));
       return;
     }
 
-    response.status(422).json({
-      message: 'Slug is already taken',
-    });
+    next(new HttpException(422, 'Slug is already taken'));
   }
 
   private async findBySlug(slug: string) {
