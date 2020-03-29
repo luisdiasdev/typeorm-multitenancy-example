@@ -44,7 +44,8 @@ class TenantController extends AbstractController {
     const existingTenant = await this.findBySlug(tenant.slug);
 
     if (!existingTenant) {
-      return response.status(201).json(await this.repository.save(tenant));
+      response.status(201).json(await this.repository.save(tenant));
+      return;
     }
 
     response.status(422).json({
