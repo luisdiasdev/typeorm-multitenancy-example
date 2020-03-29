@@ -2,8 +2,9 @@ import express from 'express';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
-import AbstractController from './controller/abstract.controller';
 import { Env, properties } from './config';
+import AbstractController from './controller/abstract.controller';
+import httpErrorHandler from './middleware/error.middleware';
 
 class App {
     private app: express.Application;
@@ -16,6 +17,7 @@ class App {
 
       this.initializeMiddlewares();
       this.initializeRoutes(controllers);
+      this.initializeHttpErrorHandler();
     }
 
     private initializeMiddlewares() {
@@ -32,6 +34,10 @@ class App {
       controllers.forEach((controller) => {
         this.app.use(controller.path, controller.router);
       });
+    }
+
+    private initializeHttpErrorHandler() {
+      this.app.use(httpErrorHandler);
     }
 
     listen() {

@@ -2,6 +2,8 @@ import express from 'express';
 import { getRepository } from 'typeorm';
 import AbstractController from './abstract.controller';
 import Tenant from '../model/tenant.model';
+import validationMiddleware from '../middleware/validation.middleware';
+import CreateTenantRequest from '../dto/createTenant.request';
 
 class TenantController extends AbstractController {
   public path = '/tenants';
@@ -18,7 +20,7 @@ class TenantController extends AbstractController {
   private initializeRoutes() {
     this.router.get('/', this.getAll);
     this.router.get('/:slug', this.getBySlug);
-    this.router.post('/', this.save);
+    this.router.post('/', validationMiddleware(CreateTenantRequest), this.save);
   }
 
   private getAll = async (request: express.Request, response: express.Response) => {
@@ -52,6 +54,7 @@ class TenantController extends AbstractController {
 
   private async findBySlug(slug: string) {
     return this.repository.createQueryBuilder('tenant')
+      .leftJoinAndSelect('tenant.config', 'tenants_config')
       .where('tenant.slug = :slug', { slug })
       .getOne();
   }
