@@ -36,7 +36,7 @@ export default class UserController extends AbstractController {
       const repository = response.locals.repository as Repository<User>;
       const user: User = request.body;
 
-      const existingUser = this.findByUsername(repository, user.username);
+      const existingUser = await this.findByUsername(repository, user.username);
 
       if (existingUser) {
         next(new HttpException(422, 'Username already taken'));
