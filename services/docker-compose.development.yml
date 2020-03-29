@@ -1,0 +1,64 @@
+version: '3.7'
+
+services: 
+    postgres:
+        container_name: postgres
+        image: postgres-ptbr
+        build: ./postgres
+        environment: 
+            POSTGRES_PASSWORD: main-password
+            POSTGRES_DB: main-db
+        ports: 
+            - "5432:5432"
+        networks: 
+            - the-one-network
+    
+    tenants-api-dev:
+        image: tenants-api-dev
+        build: ./tenants
+        command: node --inspect=0.0.0.0:9229 build/index.js
+        environment: 
+            NODE_ENV: development
+            DATABASE_URL: postgres://postgres:main-password@postgres/main-db
+            PORT: 9091
+        ports: 
+            - "9091:9091"
+        networks: 
+            - the-one-network
+        links: 
+            - postgres
+        depends_on: 
+            - postgres
+
+    tenant-db:
+        container_name: tenant-db
+        image: postgres-ptbr
+        build: ./postgres
+        environment: 
+            POSTGRES_PASSWORD: tenant-password
+            POSTGRES_DB: tenant-db
+        ports: 
+            - "5433:5432"
+        networks: 
+            - the-one-network
+    
+    users-api-dev:
+        image: users-api-dev
+        build: ./users
+        command: node --inspect=0.0.0.0:9230 build/index.js
+        environment: 
+            NODE_ENV: development
+            PORT: 9092
+            TENANT_URL: http://tenants-api-dev:9091
+        ports: 
+            - "9092:9092"
+        networks: 
+            - the-one-network
+        links: 
+            - postgres
+        depends_on: 
+            - postgres
+
+networks: 
+    the-one-network:
+        driver: bridge
