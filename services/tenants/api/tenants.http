@@ -11,7 +11,7 @@ POST http://localhost:3000/tenants HTTP/1.1
 Content-Type: application/json
 
 {
-    "slug": "umslugvalido",
+    "slug": "theslug",
     "config": {
         "port": "5433",
         "username": "postgres",
