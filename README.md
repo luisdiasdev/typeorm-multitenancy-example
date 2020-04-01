@@ -35,6 +35,11 @@ Inside the *services* folder there are some files and folders:
 | users          | Service that depends on the tenants service for serving the users |
 | docker-compose.development.yml | Sample docker-compose file for running everything together |
 
+## Consuming the API
+
+There examples inside each of the services folders (**tenants**, **users**), inside the **api/** folder.
+The files are compatible with [rest-client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) VSCode extension
+
 ## Built with
 
 * [Typescript](https://github.com/Microsoft/TypeScript)
