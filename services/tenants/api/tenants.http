@@ -13,6 +13,7 @@ Content-Type: application/json
 {
     "slug": "theslug",
     "config": {
+        "host": "yourpostgreshostnameorip",
         "port": "5433",
         "username": "postgres",
         "password": "moonspell",
